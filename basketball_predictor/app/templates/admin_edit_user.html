@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Edit User: {{ user.username }}</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Username:</label><br>
+        <input type="text" name="username" value="{{ user.username }}"><br><br>
+
+        <label>New Password (leave blank if no change):</label><br>
+        <input type="password" name="password"><br><br>
+
+        <label>
+            <input type="checkbox" name="is_admin" {% if user.is_admin %}checked{% endif %}>
+            👑 Admin rights
+        </label><br><br>
+
+        <button type="submit">💾 Save</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-blue">⬅️ Back to Dashboard</a>
+</body>
+</html>

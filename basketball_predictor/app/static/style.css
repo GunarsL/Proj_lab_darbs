@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h2 {
+    color: #1f0827;
+    margin-bottom: 20px;
+}
+
+a {
+    color: #1f0827;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #1f0827;
+    color: #fff;
+}
+
+/* Пагинация */
+.pagination {
+    margin: 20px 0;              /* отступы сверху и снизу */
+    display: flex;
+    justify-content: center;     /* выравнивание по центру */
+    flex-wrap: wrap;             /* перенос строк при нехватке места */
+    gap: 8px;                    /* расстояние между кнопками */
+}
+
+.pagination a, 
+.pagination span {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    color: #1f0827;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.pagination .active {
+    font-weight: bold;
+    background: #ddd;
+}
+
+.pagination a:hover {
+    background: #eee;
+}
+
+/* Кнопки */
+button, .btn {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-edit {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #45a049;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #da190b;
+}
+
+.btn-blue {
+    background-color: #008CBA;
+    color: white;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+}
+
+.btn-blue:hover {
+    background-color: #007bb5;
+}
+
+.btn-update {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 12px;
+    margin-bottom: 15px;
+    display: inline-block;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.btn-update:hover {
+    background-color: #45a049;
+}
+
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+ul li {
+    background-color: #fffae6;
+    border-left: 5px solid #ffd700;
+    padding: 10px;
+    margin-bottom: 5px;
+}

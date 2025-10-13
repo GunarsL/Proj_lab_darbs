@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Welcome, {{ username }}</h2>
+    <ul>
+        <li><a href="{{ url_for('main.games') }}">Games</a></li>
+        <li><a href="{{ url_for('main.model') }}">Model</a></li>
+        <li><a href="{{ url_for('main.predictions') }}">My Predictions</a></li>
+        <li><a href="{{ url_for('main.charts') }}">Charts</a></li>
+    </ul>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+</body>
+</html>

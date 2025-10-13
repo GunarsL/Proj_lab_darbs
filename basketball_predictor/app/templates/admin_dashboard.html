@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Admin Dashboard</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <a href="{{ url_for('admin.create_user') }}" class="btn btn-blue">➕ Create New User</a>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Admin</th>
+            <th>Actions</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ '✅' if user.is_admin else '❌' }}</td>
+            <td>
+                <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" class="btn btn-edit">✏️Edit</a>
+                <a href="{{ url_for('admin.delete_user', user_id=user.id) }}" class="btn btn-delete">🗑️Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('main.profile') }}" class="btn btn-blue">⬅️ Back to Profile</a>
+</body>
+</html>
