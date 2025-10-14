@@ -48,6 +48,13 @@ No bezmaksas skatu punkta gandrīz nekas lietderīgs netiek sniegts un lielākot
 Basketbola spēles ir sezonāls sporta veids, tāpēc lielākoties katrs līdzīgais risinājums piedāvā iespēju arī aplūkot citus sporta veidus un veikt prognozes ar AI modeļiem vai algoritmiem.
 Netika atrasts specifiski vizuāls attēlojums grafa formā vai kaut kādos šablonos. Reti kurš risinājums sniedz padziļinātu statistiku par spēlēm nākošajo sezonu, pirms tā ir sākusies, kas visticamāk liecina, ka dati, kuri tiek atspoguļoti, sākotnēji tiek ievākti sezonu sākumos un tad salīdzināti ar vēsturiskajiem. Parastam lietotājam lielākoties interesētu tikai turnīru spēles jeb Finals, kur šie algoritmi jau ir satrennēti un ieguvuši lielu datu apjomu.
 
+## 🧩 Konceptu modelis
+
+![Konceptu modelis](/modelis.png)
+
+*Attēls: Projekta konceptu modelis.*
+
+
 ## ⚙️ Tehnoloģiju steks
 
 | Komponents | Tehnoloģija |
