@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Predictions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="floating-form predictions-card">
+        <h2>My Predictions</h2>
+
+        <a href="{{ url_for('main.create_prediction') }}" class="btn-purple">➕ Create New Prediction</a>
+
+        {% if predictions %}
+        <div class="table-container">
+            <table class="predictions-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Teams</th>
+                        <th>LR Win % (Home)</th>
+                        <th>LR Win % (Visitor)</th>
+                        <th>LR Predicted Winner</th>
+                        <th>RF Win % (Home)</th>
+                        <th>RF Win % (Visitor)</th>
+                        <th>RF Predicted Winner</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pred in predictions %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+
+                        <td class="team-cell">
+                            <img src="{{ url_for('static', filename='nba_logo/' ~ pred.home_team ~ '.svg') }}" class="team-logo" alt="{{ pred.home_team }}">
+                            <span>{{ pred.home_team }}</span>
+                        </td>
+
+                        <td class="team-cell">
+                            <img src="{{ url_for('static', filename='nba_logo/' ~ pred.visitor_team ~ '.svg') }}" class="team-logo" alt="{{ pred.visitor_team }}">
+                            <span>{{ pred.visitor_team }}</span>
+                        </td>
+
+                        <td>{{ (pred.lr_prob_team1_win * 100) | round(2) if pred.lr_prob_team1_win is not none else 'N/A' }}%</td>
+                        <td>{{ ((1 - pred.lr_prob_team1_win) * 100) | round(2) if pred.lr_prob_team1_win is not none else 'N/A' }}%</td>
+                        <td>
+                            {% if pred.lr_prob_team1_win is not none %}
+                                <div class="team-cell">
+                                    <img src="{{ url_for('static', filename='nba_logo/' ~ (pred.home_team if pred.lr_prob_team1_win >= 0.5 else pred.visitor_team) ~ '.svg') }}" class="team-logo">
+                                    <span>{{ pred.home_team if pred.lr_prob_team1_win >= 0.5 else pred.visitor_team }}</span>
+                                </div>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+
+                        <td>{{ (pred.rf_prob_team1_win * 100) | round(2) if pred.rf_prob_team1_win is not none else 'N/A' }}%</td>
+                        <td>{{ ((1 - pred.rf_prob_team1_win) * 100) | round(2) if pred.rf_prob_team1_win is not none else 'N/A' }}%</td>
+                        <td>
+                            {% if pred.rf_prob_team1_win is not none %}
+                                <div class="team-cell">
+                                    <img src="{{ url_for('static', filename='nba_logo/' ~ (pred.home_team if pred.rf_prob_team1_win >= 0.5 else pred.visitor_team) ~ '.svg') }}" class="team-logo">
+                                    <span>{{ pred.home_team if pred.rf_prob_team1_win >= 0.5 else pred.visitor_team }}</span>
+                                </div>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+
+                        <td>{{ pred.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+
+                        <td>
+                            <form action="{{ url_for('main.delete_prediction', prediction_id=pred.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn-delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="no-predictions">No predictions yet.</p>
+        {% endif %}
+
+        <a href="{{ url_for('main.profile') }}" class="btn-blue back-btn">⬅️ Back to Profile</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="floating-form profile-card">
+
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='slam.svg') }}" alt="Logo" class="logo">
+        </div>
+        
+        <h2>Welcome, {{ username }}</h2>
+
+        <ul class="profile-links">
+            <li><a href="{{ url_for('main.games') }}">Games</a></li>
+            <li><a href="{{ url_for('main.model') }}">Model</a></li>
+            <li><a href="{{ url_for('main.predictions') }}">My Predictions</a></li>
+            <li><a href="{{ url_for('main.charts') }}">Charts</a></li>
+        </ul>
+
+        <a href="{{ url_for('auth.logout') }}" class="logout-btn">Logout</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Delete</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="floating-form delete-card">
+        <h2>Delete User: {{ user.username }}</h2>
+        <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+
+        <form method="POST" class="delete-form">
+            <button type="submit" class="btn-delete">Yes, Delete</button>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn-blue">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

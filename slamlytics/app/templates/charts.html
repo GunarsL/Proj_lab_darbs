@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Charts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body>
+    <div class="floating-form charts-card">
+        <h2>📊 Model Performance Charts</h2>
+
+        <div class="charts-container">
+            <div class="metrics">
+                <div class="chart-card">
+                    <h3>Logistic Regression</h3>
+                    <canvas id="lrChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Random Forest</h3>
+                    <canvas id="rfChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card comparison-card">
+                <h3>Comparison: Which Model is Better?</h3>
+                <canvas id="compareChart"></canvas>
+            </div>
+        </div>
+
+        <a href="{{ url_for('main.profile') }}" class="btn-blue back-btn">⬅️ Back to Profile</a>
+    </div>
+
+    <script>
+        const lrData = {{ results['lr']|tojson }};
+        const rfData = {{ results['rf']|tojson }};
+        const scores = {{ scores|tojson }};
+
+        new Chart(document.getElementById('lrChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(lrData),
+                datasets: [{
+                    label: 'Logistic Regression',
+                    data: Object.values(lrData),
+                    backgroundColor: '#8B5CF6'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('rfChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(rfData),
+                datasets: [{
+                    label: 'Random Forest',
+                    data: Object.values(rfData),
+                    backgroundColor: '#4F46E5'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('compareChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Logistic Regression', 'Random Forest'],
+                datasets: [{
+                    data: [scores.lr, scores.rf],
+                    backgroundColor: ['#8B5CF6', '#4F46E5']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const dataset = context.dataset;
+                                const total = dataset.data.reduce((a, b) => a + b, 0);
+                                const value = dataset.data[context.dataIndex];
+                                const percentage = ((value / total) * 100).toFixed(1) + "%";
+                                return context.label + ": " + value + " (" + percentage + ")";
+                            }
+                        }
+                    },
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            return ((value / sum) * 100).toFixed(1) + "%";
+                        },
+                        color: "#fff",
+                        font: { weight: "bold" }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    </script>
+</body>
+</html>

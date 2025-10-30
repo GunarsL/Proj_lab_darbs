@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="floating-form prediction-card">
+        <h2>Create a New Prediction</h2>
+
+        <form method="POST" class="prediction-form-container">
+            <div class="prediction-form">
+                {% for field in ['home_team', 'visitor_team'] %}
+                <div class="custom-select" id="{{ field }}-select">
+                    <input type="hidden" name="{{ field }}" required>
+                    <div class="select-selected">Select team</div>
+                    <div class="select-items">
+                        {% for abbr, full_name in teams.items() %}
+                        <div data-value="{{ abbr }}">
+                            <img src="{{ url_for('static', filename='nba_logo/' ~ abbr ~ '.svg') }}" class="team-logo">
+                            {{ abbr }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if loop.index == 1 %}
+                <div class="vs-text">VS</div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class="flash-messages">
+                  {% for message in messages %}
+                    <li>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+            <button type="submit" class="btn-purple">➕ Create Prediction</button>
+        </form>
+
+        <a href="{{ url_for('main.predictions') }}" class="btn-blue back-btn">⬅️ Back to Predictions</a>
+    </div>
+
+    <script>
+    document.querySelectorAll('.custom-select').forEach(function(selectWrapper) {
+        const selected = selectWrapper.querySelector('.select-selected');
+        const items = selectWrapper.querySelector('.select-items');
+        const input = selectWrapper.querySelector('input');
+
+        selected.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelectorAll('.select-items').forEach(i => i.style.display = 'none');
+            items.style.display = 'block';
+        });
+
+        items.querySelectorAll('div').forEach(function(option) {
+            option.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                input.value = value;
+                selected.innerHTML = this.innerHTML;
+                items.style.display = 'none';
+            });
+        });
+    });
+
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.select-items').forEach(i => i.style.display = 'none');
+    });
+    </script>
+</body>
+</html>

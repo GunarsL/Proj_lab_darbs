@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="floating-form model-card">
+        <h2>Model Summary</h2>
+
+        {% if lr_summary.error %}
+            <p class="error-msg"><strong>Error:</strong> {{ lr_summary.error }}</p>
+        {% else %}
+            <section class="model-section">
+                <h3>🏆 Top 3 Teams with Highest Winrate</h3>
+                <ol class="top3-list">
+                {% for team in lr_summary.top3_teams %}
+                    <li class="team">
+                        <img src="{{ url_for('static', filename='nba_logo/' ~ team.team ~ '.svg') }}"
+                             alt="{{ team.team }} logo"
+                             class="team-logo">
+                        <span>{{ team.team }}</span>
+                        <span class="winrate">{{ '%.2f'|format(team.win_prob * 100) }}%</span>
+                    </li>
+                {% endfor %}
+                </ol>
+            </section>
+
+            <section class="model-section">
+                <h3>📊 Logistic Regression</h3>
+                <p>Accuracy: <strong>{{ '%.3f'|format(lr_summary.lr_accuracy) }}</strong> | 
+                   AUC: <strong>{{ '%.3f'|format(lr_summary.lr_auc) }}</strong></p>
+                <p>Train / Test: {{ lr_summary.n_train }} / {{ lr_summary.n_test }}</p>
+                <h4>Top Features (|coef|)</h4>
+                <ul class="feature-list">
+                    {% for k,v in lr_summary.lr_top_features.items() %}
+                        <li class="model-text">
+                            <img src="{{ url_for('static', filename='nba_logo/' ~ k ~ '.svg') }}"
+                             alt="{{ k }} logo"
+                             class="team-logo">
+                            <span>{{ k }} — {{ '%.4f'|format(v) }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section class="model-section">
+                <h3>🌲 Random Forest</h3>
+                <p>Accuracy: <strong>{{ '%.3f'|format(rf_summary.rf_accuracy) }}</strong> | 
+                   AUC: <strong>{{ '%.3f'|format(rf_summary.rf_auc) }}</strong></p>
+                <h4>Top Features (importance)</h4>
+                <ul class="feature-list">
+                    {% for k,v in rf_summary.rf_top_features.items() %}
+                        <li class="model-text">
+                            <img src="{{ url_for('static', filename='nba_logo/' ~ k ~ '.svg') }}"
+                             alt="{{ k }} logo"
+                             class="team-logo">
+                            <span>{{ k }} — {{ '%.4f'|format(v) }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+
+        <a href="{{ url_for('main.profile') }}" class="btn-blue back-btn">⬅️ Back to Profile</a>
+    </div>
+</body>
+</html>

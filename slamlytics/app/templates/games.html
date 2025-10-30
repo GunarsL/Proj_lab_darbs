@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basketball Games</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .loader {
+            max-width: fit-content;
+            color: rgb(242, 255, 240);
+            font-size: 50px;
+            font-family: Mine, sans-serif;
+            position: relative;
+            font-style: italic;
+            font-weight: 600;
+            display: none;
+            margin: 20px auto;
+        }
+        .loader span {
+            animation: cut 2s infinite;
+            transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .loader:hover {
+            color: #fcffdf;
+        }
+
+        .loader::after {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 6px;
+            border-radius: 4px;
+            background-color: #ff828291;
+            top: 0px;
+            filter: blur(10px);
+            animation: scan 2s infinite;
+            left: 0;
+            z-index: 0;
+            transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .loader::before {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 5px;
+            border-radius: 4px;
+            background-color: #ff8282;
+            top: 0px;
+            animation: scan 2s infinite;
+            left: 0;
+            z-index: 1;
+            filter: opacity(0.9);
+            transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scan {
+            0% { top: 0px; }
+            25% { top: 54px; }
+            50% { top: 0px; }
+            75% { top: 54px; }
+        }
+
+        @keyframes cut {
+            0% { clip-path: inset(0 0 0 0); }
+            25% { clip-path: inset(100% 0 0 0); }
+            50% { clip-path: inset(0 0 100% 0); }
+            75% { clip-path: inset(0 0 0 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-form games-card">
+        <h2>Basketball Games</h2>
+
+        <a href="{{ url_for('main.import_games_route') }}" id="update-btn" class="btn-update">Update New Games</a>
+
+        <div class="loader" id="loader">Updating...</div>
+
+        <table class="games-table">
+            <tr>
+                <th>Date</th>
+                <th>Home Team</th>
+                <th>Score</th>
+                <th>Visitor Team</th>
+            </tr>
+            {% for game in games %}
+            <tr>
+                <td>{{ game.date.strftime("%Y-%m-%d") }}</td>
+                <td class="team">
+                    <img src="{{ url_for('static', filename='nba_logo/' ~ game.home_team ~ '.svg') }}"
+                         alt="{{ game.home_team }} logo"
+                         class="team-logo">
+                    {{ game.home_team }}
+                </td>
+                <td>{{ game.home_score }} - {{ game.visitor_score }}</td>
+                <td class="team">
+                    <img src="{{ url_for('static', filename='nba_logo/' ~ game.visitor_team ~ '.svg') }}"
+                         alt="{{ game.visitor_team }} logo"
+                         class="team-logo">
+                    {{ game.visitor_team }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="pagination">
+            {% if pagination.has_prev %}
+                <a href="{{ url_for('main.games', page=pagination.prev_num) }}">⬅️ Prev</a>
+            {% else %}
+                <span>⬅️ Prev</span>
+            {% endif %}
+
+            {% for p in pagination.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+                {% if p %}
+                    {% if p == pagination.page %}
+                        <span class="active">{{ p }}</span>
+                    {% else %}
+                        <a href="{{ url_for('main.games', page=p) }}">{{ p }}</a>
+                    {% endif %}
+                {% else %}
+                    <span>…</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagination.has_next %}
+                <a href="{{ url_for('main.games', page=pagination.next_num) }}">Next ➡️</a>
+            {% else %}
+                <span>Next ➡️</span>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('main.profile') }}" class="btn-blue back-btn">⬅️ Back to Profile</a>
+    </div>
+
+    <script>
+        document.getElementById("update-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            const loader = document.getElementById("loader");
+            loader.style.display = "block";
+
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 50);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .password-checker {
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin-top: 1rem;
+            color: #E0E0E2;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .password-checker h4 {
+            color: #A855F7;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .password-checker ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .password-checker li {
+            margin: 0.4rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .password-checker li.invalid {
+            color: #f87171;
+        }
+
+        .password-checker li.valid {
+            color: #4CAF50;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: default;
+        }
+
+        .container input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .checkmark {
+            --clr: #4CAF50;
+            position: relative;
+            height: 1.3em;
+            width: 1.3em;
+            background-color: #555;
+            border-radius: 50%;
+            transition: 300ms;
+            flex-shrink: 0;
+        }
+
+        .container input:checked ~ .checkmark {
+            background-color: var(--clr);
+            border-radius: .5rem;
+            animation: pulse 500ms ease-in-out;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .container .checkmark:after {
+            left: 0.45em;
+            top: 0.25em;
+            width: 0.25em;
+            height: 0.5em;
+            border: solid #E0E0E2;
+            border-width: 0 0.15em 0.15em 0;
+            transform: rotate(45deg);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 #4CAF5090; rotate: 20deg; }
+            50% { rotate: -20deg; }
+            75% { box-shadow: 0 0 0 10px #4CAF6060; }
+            100% { box-shadow: 0 0 0 13px #4CAF6030; rotate: 0; }
+        }
+
+        .password-checker.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .password-checker.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+<div class="create-user-card">
+    <h2>Create New User</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="create-user-form">
+        <div class="form-field">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="form-field">
+            <label>Password:</label>
+            <input type="password" name="password" id="password" required>
+        </div>
+
+        <div class="password-checker hidden" id="password-checker">
+            <h4>Password must contain:</h4>
+            <ul>
+                <li class="container" id="lowercase"><input type="checkbox"><div class="checkmark"></div> At least one lowercase letter</li>
+                <li class="container" id="uppercase"><input type="checkbox"><div class="checkmark"></div> At least one uppercase letter</li>
+                <li class="container" id="number"><input type="checkbox"><div class="checkmark"></div> At least one number</li>
+                <li class="container" id="special"><input type="checkbox"><div class="checkmark"></div> At least one special character</li>
+                <li class="container" id="length"><input type="checkbox"><div class="checkmark"></div> Minimum 8 characters</li>
+            </ul>
+        </div>
+
+        <div class="form-field admin-checkbox">
+            <input type="checkbox" name="is_admin">
+            <label>Admin</label>
+        </div>
+
+        <button type="submit" class="btn-create">Create User</button>
+    </form>
+
+    <a href="{{ url_for('admin.dashboard') }}" class="back-btn btn btn-blue">⬅️ Back to Admin Dashboard</a>
+</div>
+
+<script>
+    const passwordInput = document.getElementById("password");
+    const checker = document.getElementById("password-checker");
+
+    const rules = {
+        lowercase: /[a-z]/,
+        uppercase: /[A-Z]/,
+        number: /[0-9]/,
+        special: /[\W_]/,
+        length: /.{8,}/
+    };
+
+    passwordInput.addEventListener("focus", () => {
+        checker.classList.remove("hidden");
+        checker.classList.add("visible");
+    });
+
+    passwordInput.addEventListener("blur", () => {
+        if (!passwordInput.value) {
+            checker.classList.add("hidden");
+            checker.classList.remove("visible");
+        }
+    });
+
+    passwordInput.addEventListener("input", () => {
+        for (const [id, regex] of Object.entries(rules)) {
+            const item = document.getElementById(id);
+            const checkbox = item.querySelector("input");
+
+            if (regex.test(passwordInput.value)) {
+                checkbox.checked = true;
+                item.classList.add("valid");
+                item.classList.remove("invalid");
+            } else {
+                checkbox.checked = false;
+                item.classList.add("invalid");
+                item.classList.remove("valid");
+            }
+        }
+    });
+</script>
+</body>
+</html>
