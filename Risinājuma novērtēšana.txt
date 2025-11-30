@@ -1,0 +1,57 @@
+RISINĀJUMA NOVĒRTĒŠANA:
+
+Novērtēšanas mērķis.
+Novērtēt izstrādātās sistēmas efektivitāti basketbola spēļu iznākumu prognozēšanā, salīdzinot divus mašīnmācīšanās modeļus:
+Logistisko regresiju (LR)
+Random Forest (RF)
+
+Datu avots:
+NBA spēļu vēsturiskie dati, kas automātiski importēti no API un glabāti datubāzē.
+
+Datu sagatavošana:
+Izmantotas notikušās spēles no datubāzes.
+Katrā ierakstā: mājas komanda, viesu komanda, punkti, uzvarētājs.
+Dati tiek pārkodēti binārajā formā - (komanda piedalās vai nē).
+
+Metodika:
+Modeļi: LR un RF.
+Jaunākām spēlēm piešķirti lielāki svari.
+Katram lietotāja minējumam prognoze tiek salīdzināta ar reālo rezultātu.
+
+Novērtēšanas metri:
+Precizitāte – pareizo prognožu īpatsvars.
+Apmācības apjoms (n_train) - treniņu ierakstu skaits
+ROC AUC – modeļa spēja atšķirt uzvaru/zaudējumu.
+TP / FP – pareizie un kļūdainie minējumi.
+Prognozes laiks – < 1 s.
+
+ISO 25010 kritēriji:
+Funkcionalitāte – Sistēma nodrošina spēļu importu, modeļu trenēšanu, prognozēšanu un statistikas attēlošanu
+Precizitāte – Izmērīta ar Accuracy un ROC AUC testkopā.
+Lietojamība – Web interfeiss: prognožu ievade, spēļu pārlūkošana, rezultātu grafiki.
+Efektivitāte – Modeļu apmācība notiek dažu sekunžu laikā.
+Uzticamība – Projekts palaižams uz jebkuras Python/Flask vides, modulāra arhitektūra (Flask + ML modulis).
+
+Eksperimenta izpilde:
+Apmācīti divi modeļi – "Logistic Regression" un "Random Forest".
+Modeļu kvalitāte novērtēta, izmantojot Accuracy un ROC AUC rādītājus, kā arī reālo lietotāju prognožu salīdzinājumu ar spēļu rezultātiem.
+
+Rezultātu rādītāji modeļa novērtēšanai:
+LR precizitāte un ROC AUC.
+RF precizitāte un ROC AUC.
+pareizo un kļūdaino prognožu skaits
+katra modeļa kopējais rezultāts
+3 veiksmīgākās komandas pēc uzvaru proporcijas
+
+Definition of Done (DoD): 
+Abi modeļi trenējas bez kļūdām
+Prognozes tiek saglabātas datubāzē
+Rezultāti tiek salīdzināti ar reālajiem iznākumiem
+Pieejami precizitātes grafiki
+Lietotāja interfeiss ļauj veidot un analizēt prognozes
+
+Secinājumi:
+Izstrādātais risinājums ļauj reāllaikā prognozēt NBA spēļu rezultātus.
+Random Forest parasti uzrāda augstāku AUC, tātad labāku sarežģītu sakarību uztveri.
+Sistēmas funkcionalitāte atbilst ISO 25010 galvenajiem kvalitātes kritērijiem.
+Risinājums demonstrē praktisku ML pielietojumu sporta analītikā.
